@@ -1,0 +1,40 @@
+.nutui-react-demo {
+  height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: auto;
+  .add-btn {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    .icon-addition_fill {
+      font-size: 64px;
+      color: red;
+    }
+  }
+
+  .record-item {
+    background-color: var(
+      --nutui-cell-background-color,
+      var(--nutui-gray-1, #fff)
+    );
+    border-radius: var(--nutui-cell-border-radius, 6px);
+    box-shadow: var(--nutui-cell-box-shadow, 0 1px 7px 0 #edeef1);
+    box-sizing: border-box;
+    color: var(--nutui-cell-title-color, var(--nutui-gray-7, #1a1a1a));
+    font-size: var(
+      --nutui-cell-title-font-size,
+      var(--nutui-font-size-3, 14px)
+    );
+    line-height: var(--nutui-cell-line-height, 20px);
+    margin: 10px 0;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    .record-item-inner {
+      padding: 16px;
+    }
+  }
+}

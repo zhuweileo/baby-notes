@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "baby-notes",
+  "description": "",
+  "appid": "wx5fb1e92bde6f2341",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}
