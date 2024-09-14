@@ -154,7 +154,7 @@ function Index() {
     <ConfigProvider locale={locale}>
       <View className="nutui-react-demo">
         <DatePicker value={date} onChange={onDateChange} />
-        <div>
+        <div className="records-list">
           {records.map((record, index) => {
             return (
               <div

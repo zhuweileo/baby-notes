@@ -1,8 +1,10 @@
 .nutui-react-demo {
   height: 100vh;
-  padding: 16px;
+  // padding: 16px;
   box-sizing: border-box;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
   .add-btn {
     position: fixed;
     bottom: 32px;
@@ -15,26 +17,32 @@
     }
   }
 
-  .record-item {
-    background-color: var(
-      --nutui-cell-background-color,
-      var(--nutui-gray-1, #fff)
-    );
-    border-radius: var(--nutui-cell-border-radius, 6px);
-    box-shadow: var(--nutui-cell-box-shadow, 0 1px 7px 0 #edeef1);
-    box-sizing: border-box;
-    color: var(--nutui-cell-title-color, var(--nutui-gray-7, #1a1a1a));
-    font-size: var(
-      --nutui-cell-title-font-size,
-      var(--nutui-font-size-3, 14px)
-    );
-    line-height: var(--nutui-cell-line-height, 20px);
-    margin: 10px 0;
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    .record-item-inner {
-      padding: 16px;
+  .records-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 16px;
+    margin-bottom: 102px;
+    .record-item {
+      background-color: var(
+        --nutui-cell-background-color,
+        var(--nutui-gray-1, #fff)
+      );
+      border-radius: var(--nutui-cell-border-radius, 6px);
+      box-shadow: var(--nutui-cell-box-shadow, 0 1px 7px 0 #edeef1);
+      box-sizing: border-box;
+      color: var(--nutui-cell-title-color, var(--nutui-gray-7, #1a1a1a));
+      font-size: var(
+        --nutui-cell-title-font-size,
+        var(--nutui-font-size-3, 14px)
+      );
+      line-height: var(--nutui-cell-line-height, 20px);
+      margin: 10px 0;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      .record-item-inner {
+        padding: 16px;
+      }
     }
   }
 }
