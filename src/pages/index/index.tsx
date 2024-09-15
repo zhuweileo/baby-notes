@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Span, View } from "@tarojs/components";
 import {
   ConfigProvider,
@@ -14,55 +14,99 @@ import Addpopup from "./add-popup";
 import DatePicker from "./date-picker";
 
 import "./index.scss";
+
+const initTags = [
+  {
+    name: "拉屎",
+    type: "single",
+    unit: "",
+    color: "#95e1d3",
+  },
+  {
+    name: "撒尿",
+    type: "single",
+    unit: "",
+    color: "#ff5722",
+  },
+  {
+    name: "喂奶",
+    type: "input",
+    unit: "mL",
+    color: "#3f72af",
+  },
+  {
+    name: "黄疸",
+    type: "input",
+    unit: "",
+    color: "#f38181",
+  },
+  {
+    name: "体温",
+    type: "input",
+    unit: "℃",
+    color: "#fc5185",
+  },
+  {
+    name: "身高",
+    type: "input",
+    unit: "cm",
+    color: "#fcbad3",
+  },
+  {
+    name: "体重",
+    type: "input",
+    unit: "g",
+    color: "#aa96da",
+  },
+];
+
+function initRecords(records, tags) {
+  return records.map((record) => {
+    Object.keys(record).forEach((key) => {
+      const tag = tags.find((tag) => tag.name === key);
+      if (tag) {
+        record[key] = {
+          ...record[key],
+          ...tag,
+        };
+      }
+    });
+    return {
+      ...record,
+    };
+  });
+}
+
 function Index() {
   const [locale, setLocale] = useState(zhCN);
   const [date, setDate] = useState(dayjs().format("YYYY/MM/DD"));
   const dbData = db.get();
-  const [records, setRecords] = useState(dbData[date] || []);
+  const [tags, setTags] = useState(initTags);
+  const [records, setRecords] = useState(
+    initRecords(dbData[date] || [], initTags)
+  );
 
   const [popVisible, setPopVisible] = useState(false);
   const [popInitData, setPopInitData] = useState();
 
-  const [tags, setTags] = useState([
-    {
-      name: "拉屎",
-      type: "single",
-      unit: "",
-      color: "red",
-    },
-    {
-      name: "撒尿",
-      type: "single",
-      unit: "",
-      color: "blue",
-    },
-    {
-      name: "喂奶",
-      type: "input",
-      unit: "mL",
-      color: "green",
-    },
-    {
-      name: "黄疸",
-      type: "input",
-      unit: "",
-    },
-    {
-      name: "体温",
-      type: "input",
-      unit: "℃",
-    },
-    {
-      name: "身高",
-      type: "input",
-      unit: "cm",
-    },
-    {
-      name: "体重",
-      type: "input",
-      unit: "g",
-    },
-  ]);
+  // 次数统计
+  const [countList, setCountList] = useState([]);
+  useEffect(() => {
+    const counts = tags.map((tag) => {
+      let count = 0;
+      records.forEach((record) => {
+        if (record[tag.name]) {
+          count++;
+        }
+      });
+
+      return {
+        ...tag,
+        count,
+      };
+    });
+    setCountList(counts);
+  }, [tags, records]);
 
   function onPopConfirm(formData) {
     setPopVisible(false);
@@ -154,6 +198,17 @@ function Index() {
     <ConfigProvider locale={locale}>
       <View className="nutui-react-demo">
         <DatePicker value={date} onChange={onDateChange} />
+        <View className="count-list">
+          <View className="item-wrap">
+            {countList.map((count) => {
+              return (
+                <View className="count-item">
+                  {count.name}: {count.count}次
+                </View>
+              );
+            })}
+          </View>
+        </View>
         <div className="records-list">
           {records.map((record, index) => {
             return (

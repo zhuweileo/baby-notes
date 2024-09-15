@@ -17,6 +17,29 @@
     }
   }
 
+  .count-list {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    .item-wrap {
+      box-sizing: border-box;
+      background-color: var(
+        --nutui-cell-background-color,
+        var(--nutui-gray-1, #fff)
+      );
+      border-radius: var(--nutui-cell-border-radius, 6px);
+      box-shadow: var(--nutui-cell-box-shadow, 0 1px 7px 0 #edeef1);
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .count-item {
+      font-size: 12px;
+      width: 25%;
+      line-height: 18px;
+    }
+  }
+
   .records-list {
     flex: 1;
     overflow-y: auto;
