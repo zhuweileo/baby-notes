@@ -1,0 +1,24 @@
+.add-btn-wrap {
+  .popup-content {
+    padding: 16px;
+    padding-top: 0;
+    .tag-item {
+      margin-bottom: 12px;
+      display: flex;
+    }
+
+    .tag-input {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      .nut-input {
+        margin-right: 4px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 4px;
+        width: 50%;
+        flex: none;
+      }
+    }
+  }
+}

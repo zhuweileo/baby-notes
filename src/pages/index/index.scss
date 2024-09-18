@@ -5,6 +5,17 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
+
+  .header-wrap {
+    position: relative;
+    .icon-shaixuan {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translate(0, -50%);
+    }
+  }
+
   .add-btn {
     position: fixed;
     bottom: 32px;

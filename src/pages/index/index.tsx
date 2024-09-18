@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { getUUID, db } from "src/utils";
 import Addpopup from "./add-popup";
 import DatePicker from "./date-picker";
+import FilterPop from "./filter-popup";
 
 import "./index.scss";
 
@@ -86,8 +87,10 @@ function Index() {
     initRecords(dbData[date] || [], initTags)
   );
 
-  const [popVisible, setPopVisible] = useState(false);
+  const [addpopVisible, setAddPopVisible] = useState(false);
   const [popInitData, setPopInitData] = useState();
+
+  const [filterPopVisible, setFilterPopVisible] = useState(false);
 
   // 次数统计
   const [countList, setCountList] = useState([]);
@@ -109,7 +112,7 @@ function Index() {
   }, [tags, records]);
 
   function onPopConfirm(formData) {
-    setPopVisible(false);
+    setAddPopVisible(false);
 
     // 修改
     if (formData.id) {
@@ -163,17 +166,17 @@ function Index() {
   }
 
   function onAddClick() {
-    setPopVisible(true);
+    setAddPopVisible(true);
     setPopInitData();
   }
 
   function onAddPopClose() {
-    setPopVisible(false);
+    setAddPopVisible(false);
   }
 
   function onCellClick(record) {
     return () => {
-      setPopVisible(true);
+      setAddPopVisible(true);
       setPopInitData(record);
     };
   }
@@ -194,10 +197,25 @@ function Index() {
     setRecords(dbData[e] || []);
   }
 
+  function onFilterClick() {
+    setFilterPopVisible(true);
+  }
+
+  function onFilterConfirm(e) {
+    setFilterPopVisible(false);
+  }
+
+  function onFilterClose() {
+    setFilterPopVisible(false);
+  }
+
   return (
     <ConfigProvider locale={locale}>
       <View className="nutui-react-demo">
-        <DatePicker value={date} onChange={onDateChange} />
+        <View className="header-wrap">
+          <DatePicker value={date} onChange={onDateChange} />
+          <i className="iconfont icon-shaixuan" onClick={onFilterClick}></i>
+        </View>
         <View className="count-list">
           <View className="item-wrap">
             {countList.map((count) => {
@@ -243,12 +261,18 @@ function Index() {
           <i className="iconfont icon-addition_fill"></i>
         </View>
         <Addpopup
-          visible={popVisible}
+          visible={addpopVisible}
           tags={tags}
           initData={popInitData}
           onConfirm={onPopConfirm}
           onClose={onAddPopClose}
         ></Addpopup>
+        <FilterPop
+          visible={filterPopVisible}
+          tags={tags}
+          onConfirm={onFilterConfirm}
+          onClose={onFilterClose}
+        ></FilterPop>
       </View>
     </ConfigProvider>
   );
