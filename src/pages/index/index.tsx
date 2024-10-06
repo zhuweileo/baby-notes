@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Span, View } from "@tarojs/components";
+import { useDidShow, useDidHide } from "@tarojs/taro";
 import {
   ConfigProvider,
   Cell,
@@ -110,6 +111,11 @@ function Index() {
     });
     setCountList(counts);
   }, [tags, records]);
+
+  // 从后台打开时更新日期
+  useDidShow(() => {
+    onDateChange(dayjs().format("YYYY/MM/DD"));
+  });
 
   function onPopConfirm(formData) {
     setAddPopVisible(false);

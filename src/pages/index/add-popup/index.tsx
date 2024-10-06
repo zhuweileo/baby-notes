@@ -32,6 +32,17 @@ function Index(props) {
     );
   }, [props.initData]);
 
+  useEffect(() => {
+    if (props.visible && !props.initData) {
+      setFormData((oldData) => {
+        return {
+          ...oldData,
+          time: defaultTime,
+        };
+      });
+    }
+  }, [props.visible, props.initData]);
+
   function datePickerConfirm(options, value) {
     setFormData((oldValue) => {
       return {
