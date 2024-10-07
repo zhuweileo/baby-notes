@@ -23,42 +23,66 @@ const initTags = [
     type: "single",
     unit: "",
     color: "#95e1d3",
+    order: 0,
   },
   {
     name: "撒尿",
     type: "single",
     unit: "",
     color: "#ff5722",
+    order: 1,
   },
   {
     name: "喂奶",
     type: "input",
     unit: "mL",
     color: "#3f72af",
+    countSum: true,
+    order: 2,
   },
   {
-    name: "黄疸",
+    name: "睡觉",
     type: "input",
-    unit: "",
-    color: "#f38181",
+    unit: "h",
+    color: "#393e46",
+    countSum: true,
+    order: 3,
+  },
+  {
+    name: "吸奶",
+    type: "input",
+    unit: "h",
+    color: "#ffde7d",
+    countSum: true,
+    order: 4,
   },
   {
     name: "体温",
     type: "input",
     unit: "℃",
     color: "#fc5185",
+    order: 5,
   },
   {
     name: "身高",
     type: "input",
     unit: "cm",
     color: "#fcbad3",
+    order: 6,
   },
   {
     name: "体重",
     type: "input",
     unit: "g",
     color: "#aa96da",
+    order: 7,
+  },
+  {
+    name: "黄疸",
+    type: "input",
+    unit: "",
+    color: "#f38181",
+    order: 8,
   },
 ];
 
@@ -91,26 +115,60 @@ function Index() {
   const [addpopVisible, setAddPopVisible] = useState(false);
   const [popInitData, setPopInitData] = useState();
 
-  const [filterPopVisible, setFilterPopVisible] = useState(false);
-
   // 次数统计
   const [countList, setCountList] = useState([]);
   useEffect(() => {
     const counts = tags.map((tag) => {
       let count = 0;
+      let sum = 0;
       records.forEach((record) => {
-        if (record[tag.name]) {
+        const recordCell = record[tag.name];
+        if (recordCell) {
           count++;
+          if (tag.countSum && recordCell.value) {
+            sum += Number(recordCell.value);
+          }
         }
       });
 
       return {
         ...tag,
         count,
+        sum,
       };
     });
     setCountList(counts);
   }, [tags, records]);
+
+  // 过滤器
+  const [filterPopVisible, setFilterPopVisible] = useState(false);
+  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [filter, setFilter] = useState(initTags.map((item) => item.name));
+  useEffect(() => {
+    if (!filter.length) {
+      setFilteredRecords(records);
+      return;
+    }
+    const res = records
+      .map((record) => {
+        const newRecord = {};
+        newRecord.id = record.id;
+        newRecord.time = record.time;
+        Object.keys(record).forEach((key) => {
+          if (filter.includes(key)) {
+            newRecord[key] = record[key];
+          }
+        });
+        return newRecord;
+      })
+      .filter((record) => {
+        const keys = Object.keys(record).filter(
+          (key) => key !== "id" && key !== "time"
+        );
+        return keys.length;
+      });
+    setFilteredRecords(res);
+  }, [records, filter]);
 
   // 从后台打开时更新日期
   useDidShow(() => {
@@ -155,20 +213,24 @@ function Index() {
   }
 
   function renderTags(record) {
+    console.log("[ record ] >", record);
     const list: any[] = [];
     Object.entries(record).forEach(([key, value]) => {
       if (key === "time" || key === "id") {
         return;
       }
-      list.push(
-        <Tag style={{ marginRight: "8px" }} background={value.color}>
-          {key}
-          {value.value}
-          {value.unit}
+      list.push(value);
+    });
+    list.sort((a, b) => a.order - b.order);
+    return list.map((item) => {
+      return (
+        <Tag style={{ marginRight: "8px" }} background={item.color}>
+          {item.name}
+          {item.value}
+          {item.unit}
         </Tag>
       );
     });
-    return list;
   }
 
   function onAddClick() {
@@ -200,7 +262,8 @@ function Index() {
   function onDateChange(e) {
     setDate(e);
     const dbData = db.get();
-    setRecords(dbData[e] || []);
+    setRecords(initRecords(dbData[e] || [], initTags));
+    setFilter([]);
   }
 
   function onFilterClick() {
@@ -208,12 +271,22 @@ function Index() {
   }
 
   function onFilterConfirm(e) {
+    setFilter(e);
     setFilterPopVisible(false);
   }
 
   function onFilterClose() {
     setFilterPopVisible(false);
   }
+
+  // 计算出生天数
+  const [bownDays, setBownDays] = useState(0);
+  useEffect(() => {
+    var start = dayjs("2024/8/29");
+    var now = dayjs(date);
+    var days = now.diff(start, "days");
+    setBownDays(days);
+  }, [date]);
 
   return (
     <ConfigProvider locale={locale}>
@@ -222,19 +295,29 @@ function Index() {
           <DatePicker value={date} onChange={onDateChange} />
           <i className="iconfont icon-shaixuan" onClick={onFilterClick}></i>
         </View>
+        <View className="bown-detail">🐲阿康出生{bownDays}天🐲</View>
         <View className="count-list">
           <View className="item-wrap">
             {countList.map((count) => {
               return (
                 <View className="count-item">
-                  {count.name}: {count.count}次
+                  <Tag background={count.color} style={{ marginRight: "4px" }}>
+                    {count.name}
+                  </Tag>
+                  {count.count}次
+                  {count.countSum ? (
+                    <>
+                      {count.sum}
+                      {count.unit}
+                    </>
+                  ) : null}
                 </View>
               );
             })}
           </View>
         </View>
         <div className="records-list">
-          {records.map((record, index) => {
+          {filteredRecords.map((record, index) => {
             return (
               <div
                 className="record-item"
@@ -274,6 +357,7 @@ function Index() {
           onClose={onAddPopClose}
         ></Addpopup>
         <FilterPop
+          filter={filter}
           visible={filterPopVisible}
           tags={tags}
           onConfirm={onFilterConfirm}

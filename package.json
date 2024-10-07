@@ -54,6 +54,7 @@
     "@tarojs/shared": "4.0.5",
     "@tarojs/taro": "4.0.5",
     "dayjs": "^1.11.13",
+    "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },

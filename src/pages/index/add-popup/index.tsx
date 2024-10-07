@@ -125,7 +125,7 @@ function Index(props) {
           <Cell
             title="记录内容"
             description={
-              <>
+              <div style={{ marginTop: "8px" }}>
                 {props.tags.map((tag) => {
                   return (
                     <div className="tag-item">
@@ -147,7 +147,7 @@ function Index(props) {
                     </div>
                   );
                 })}
-              </>
+              </div>
             }
           ></Cell>
           <Button block type="primary" onClick={onConfirm}>
