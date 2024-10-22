@@ -41,6 +41,14 @@ const initTags = [
     order: 2,
   },
   {
+    name: "母乳",
+    type: "input",
+    unit: "min",
+    color: "#cca8e9",
+    countSum: true,
+    order: 2,
+  },
+  {
     name: "睡觉",
     type: "input",
     unit: "h",
@@ -213,8 +221,7 @@ function Index() {
   }
 
   function renderTags(record) {
-    console.log("[ record ] >", record);
-    const list: any[] = [];
+    let list: any[] = [];
     Object.entries(record).forEach(([key, value]) => {
       if (key === "time" || key === "id") {
         return;
@@ -222,6 +229,7 @@ function Index() {
       list.push(value);
     });
     list.sort((a, b) => a.order - b.order);
+    list = list.filter((item) => item.checked || item.value);
     return list.map((item) => {
       return (
         <Tag style={{ marginRight: "8px" }} background={item.color}>

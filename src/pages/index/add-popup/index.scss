@@ -10,27 +10,51 @@
     }
   }
 
-  .popup-content {
-    padding: 16px;
-    padding-top: 0;
-    .tag-item {
-      margin-bottom: 12px;
-      display: flex;
+  .nut-popup {
+    // display: flex;
+    // flex-direction: column;
+
+    .nut-popup-title {
+      // flex: none;
     }
 
-    .tag-input {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      .nut-input {
-        margin-right: 4px;
+    .popup-content {
+      padding: 16px;
+      padding-top: 0;
+      overflow: auto;
+      height: 480px;
+      margin-bottom: 30px;
+
+      .input-area {
+      }
+
+      .tag-item {
+        margin-bottom: 12px;
+        display: flex;
+      }
+
+      .tag-input {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        .nut-input {
+          margin-right: 4px;
           border: 1px solid #ccc;
           border-radius: 8px;
           padding: 4px;
           width: 50%;
           flex: none;
+        }
+      }
+
+      .confirm-btn {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 1;
+        width: 90%;
       }
     }
   }
 }
-
