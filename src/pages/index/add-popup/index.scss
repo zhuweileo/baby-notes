@@ -19,14 +19,10 @@
     }
 
     .popup-content {
+      height: 100%;
       padding: 16px;
       padding-top: 0;
-      overflow: auto;
-      height: 480px;
       margin-bottom: 30px;
-
-      .input-area {
-      }
 
       .tag-item {
         margin-bottom: 12px;

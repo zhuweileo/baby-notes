@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View } from "@tarojs/components";
+import { View, ScrollView } from "@tarojs/components";
 import {
   ConfigProvider,
   Popup,
@@ -125,7 +125,7 @@ function Index(props) {
           <Cell
             title="记录内容"
             description={
-              <div style={{ marginTop: "8px" }}>
+              <ScrollView scrollY style={{ height: "300px", marginTop: "8px" }}>
                 {props.tags.map((tag) => {
                   return (
                     <div className="tag-item">
@@ -147,7 +147,7 @@ function Index(props) {
                     </div>
                   );
                 })}
-              </div>
+              </ScrollView>
             }
           ></Cell>
           <Button block type="primary" onClick={onConfirm}>
