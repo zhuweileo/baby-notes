@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Span, View } from "@tarojs/components";
 import { useDidShow, useDidHide } from "@tarojs/taro";
 import {
@@ -296,14 +296,71 @@ function Index() {
     setBownDays(days);
   }, [date]);
 
+  // 计算出生天数
+  const [bownDays1, setBownDays1] = useState(0);
+  useEffect(() => {
+    var start = dayjs("1992/11/17");
+    var now = dayjs(date);
+    var days = now.diff(start, "days");
+    setBownDays1(days);
+  }, [date]);
+
+  // 生日快乐
+  const timer = useRef(0);
+  const [showBirthday, setShowBirthday] = useState(false);
+  function hideBirthDay() {
+    setShowBirthday(false);
+    if (timer.current) {
+      clearInterval(timer.current);
+    }
+  }
+
+  function showBirtyDay() {
+    const need = needShowBirthDay();
+    need && setShowBirthday(true);
+  }
+
+  function needShowBirthDay() {
+    // 当时间范围在 2024/11/23 00:00 - 2024/11/23 23:59 时显示生日快乐
+    const now = dayjs();
+    const start = dayjs("2024/11/23 00:00");
+    const end = dayjs("2024/11/23 23:59");
+    return now.isAfter(start) && now.isBefore(end);
+  }
+
+  useEffect(() => {
+    const need = needShowBirthDay();
+    setShowBirthday(need);
+    timer.current = setInterval(() => {
+      const need = needShowBirthDay();
+      setShowBirthday(need);
+    }, 3000);
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, []);
+
+  const isFengBirthday = needShowBirthDay();
+
   return (
     <ConfigProvider locale={locale}>
+      {showBirthday ? (
+        <div className="happy-birthday" onClick={hideBirthDay}></div>
+      ) : null}
       <View className="nutui-react-demo">
         <View className="header-wrap">
           <DatePicker value={date} onChange={onDateChange} />
           <i className="iconfont icon-shaixuan" onClick={onFilterClick}></i>
         </View>
-        <View className="bown-detail">🐲阿康出生{bownDays}天🐲</View>
+        {isFengBirthday ? (
+          <View className="bown-detail" onClick={showBirtyDay}>
+            🥳阿凤出生{bownDays1}天🥳
+          </View>
+        ) : (
+          <View className="bown-detail" onClick={showBirtyDay}>
+            🐲阿康出生{bownDays}天🐲
+          </View>
+        )}
         <View className="count-list">
           <View className="item-wrap">
             {countList.map((count) => {
